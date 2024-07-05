@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cb-translator
+  name: cb-translator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cb-translator
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cb-translator
+    spec:
+      containers:
+        - image: CONTAINER_REGISTRY_IMAGE
+          name: cb-translator
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '200m'
+          readinessProbe:
+            tcpSocket:
+              port: 5002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 5002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          envFrom:
+            - secretRef:
+                name: cb-translator-env
+      nodeSelector:
+        env: prod
+        category: main
+      tolerations:
+        - effect: NoSchedule
+          key: main
+          operator: Equal
+          value: 'true'
+status: {}

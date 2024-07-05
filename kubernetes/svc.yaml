@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cb-translator
+  name: cb-translator-svc
+spec:
+  ports:
+    - port: 5002
+      protocol: TCP
+      targetPort: 5002
+  selector:
+    app: cb-translator
+  type: NodePort
+status:
+  loadBalancer: {}
